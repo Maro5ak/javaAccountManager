@@ -38,11 +38,16 @@ public class Controller implements Initializable {
     Account currentlySelected = null;
 
     //checks whether 1) selected user exists 2) user has enough money and sends it over
+    //also if money is empty then transfer all
     @FXML
     void handleTransfer(ActionEvent event) {
         for(Account a : accounts){
             if(a.getName().equals(accountTransferField.getText()) && !accountNameField.getText().equals(currentlySelected.getName())){
-                if(currentlySelected.getBalance() >= Double.parseDouble(moneyTransferField.getText())) {
+                if(moneyTransferField.getText().isEmpty()){
+                    a.transferBalance(currentlySelected.getBalance());
+                    currentlySelected.setBalance(0);
+                }
+                else if(currentlySelected.getBalance() >= Double.parseDouble(moneyTransferField.getText())) {
                     a.transferBalance(Double.parseDouble(moneyTransferField.getText()));
                     currentlySelected.transferBalance(-(Double.parseDouble(moneyTransferField.getText())));
                 }
